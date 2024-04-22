@@ -31,7 +31,7 @@ export class User {
     @BeforeInsert()
     generateUuid() {
         if (!this.uuid) {
-        this.uuid = uuidv4();
+            this.uuid = uuidv4();
         }
     }
 }
