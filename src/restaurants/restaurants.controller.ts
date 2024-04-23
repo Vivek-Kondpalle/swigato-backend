@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { RestaurantsService } from './restaurants.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
@@ -8,8 +8,13 @@ export class RestaurantsController {
   constructor(private readonly restaurantsService: RestaurantsService) {}
 
   @Post()
-  create(@Body() createRestaurantDto: CreateRestaurantDto) {
-    return this.restaurantsService.create(createRestaurantDto);
+  async create(@Body() createRestaurantDto: CreateRestaurantDto) {
+    try {
+      const createdRestaurant = await this.restaurantsService.create(createRestaurantDto);
+      return { success: true, data: createdRestaurant }
+    } catch (error) {
+      throw new HttpException({ success: false, error: { message: error?.message }}, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   @Get()
