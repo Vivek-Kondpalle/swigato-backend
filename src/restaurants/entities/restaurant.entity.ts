@@ -1,5 +1,5 @@
 import { User } from "src/user/entities/user.entity";
-import { BeforeInsert, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { v4 as uuidv4 } from 'uuid';
 
 @Entity()
@@ -26,7 +26,7 @@ export class Restaurant {
     @Column()
     phone_number: string;
 
-    @Column({ nullable: true })
+    @Column({ nullable: false, default: 1 })
     user_id: number; 
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
@@ -35,7 +35,7 @@ export class Restaurant {
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
     updated_at: Date;
 
-    @OneToOne(() => User)
+    @ManyToOne(() => User)
     @JoinColumn({ name: 'user_id' })
     user: User;
 
